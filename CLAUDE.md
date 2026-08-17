@@ -23,16 +23,20 @@ running `/onboard-company` first.
 | Legal & Compliance (Chief Counsel) | `channels/legal/` | Legal questions (Ontario), contract review, privacy (PIPEDA/CASL), corporate records — **information, never legal advice** |
 | Customer Experience | `channels/customer-experience/` | Reviews, surveys, support quality, churn |
 | E-commerce & Inventory | `channels/ecommerce/` | Stock health, SKU profitability, storefront conversion, suppliers |
+| Technology (CTO/IT) | `channels/technology/` | Tool stack, website health, security posture, backups/continuity |
 
 ## Routing requests
 
 Match the request to a channel, then delegate to the most specific agent in
 `.claude/agents/` (agents are prefixed by channel: `ceo-`, `cmo-`, `cfo-`, `hr-`,
-`sales-`, `ops-`, `legal-`, `cx-`, `ecom-`). Cross-department questions ("how is the
-business doing?", "prep the leadership meeting") go to `ceo-chief-of-staff`, which
-fans out to the other channels; any legal question starts at `legal-chief-counsel`.
-Repeatable workflows have skills — see `.claude/skills/` (e.g. `/monthly-close`,
-`/weekly-brief`, `/hr-compliance-check`, `/ask-counsel`).
+`sales-`, `ops-`, `legal-`, `cx-`, `ecom-`, `cto-`). Cross-department questions
+("how is the business doing?", "prep the leadership meeting") go to
+`ceo-chief-of-staff`, which fans out to the other channels; any legal question
+starts at `legal-chief-counsel`. Repeatable workflows have skills — see
+`.claude/skills/` (e.g. `/monthly-close`, `/weekly-brief`, `/hr-compliance-check`,
+`/ask-counsel`). Requests arriving from Slack route per
+`company/slack-channel-map.md`. Recurring cadence is defined in
+`company/routines.md` and executed by `/run-routines` (see `docs/automation.md`).
 
 ## Conventions (all agents must follow)
 
@@ -59,14 +63,22 @@ Repeatable workflows have skills — see `.claude/skills/` (e.g. `/monthly-close
    before acting."* Laws and rates change: agents citing Ontario/federal rules must
    flag figures that should be verified against current ontario.ca / canada.ca sources.
 8. **Dates**: use the real current date in report filenames and content.
+9. **Live connectors over stale files, files over nothing**: when a relevant MCP
+   connector is available in the session (Ahrefs, accounting, CRM, analytics…),
+   prefer live data — and save meaningful pulls into the channel's `data/` folder
+   with a dated filename so reports stay reproducible. When no connector is
+   present, work from `data/` files and name the export that would improve the
+   analysis. See `docs/connectors.md`.
 
 ## Where things live
 
 ```
-company/                     Company-wide identity: profile, goals/OKRs, org chart
+company/                     Company-wide identity: profile, goals/OKRs, org chart,
+                             routines.md (cadence), slack-channel-map.md
 channels/<channel>/data/     INPUT drop-zones (subfolders per data type)
 channels/<channel>/reports/  OUTPUT — dated markdown reports
 channels/finance/ledger/     Maintained: transactions.csv + processed-files.md
 .claude/agents/              Specialist agent definitions
 .claude/skills/              Workflow skills (slash commands)
+docs/                        Setup guides: automation.md, connectors.md, slack.md
 ```

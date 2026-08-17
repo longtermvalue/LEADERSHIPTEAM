@@ -1,9 +1,11 @@
 # AI Leadership Team
 
 A duplicatable Claude Code workspace that acts as a full leadership team for one
-company. Nine department **channels**, 45 specialist **agents**, and 16 workflow
+company. Ten department **channels**, 49 specialist **agents**, and 18 workflow
 **skills** (slash commands). Drop company files into each channel's `data/`
-folders; the agents analyze them and write dated reports into `reports/`.
+folders; the agents analyze them and write dated reports into `reports/`. A
+built-in cadence (`company/routines.md` + `/run-routines`) keeps it running on a
+schedule — see `docs/automation.md`.
 
 Built for Ontario, Canada businesses: Finance thinks in CAD/CRA/HST, HR is grounded in
 Ontario employment law (ESA, OHSA, AODA, Human Rights Code), Legal covers PIPEDA/CASL.
@@ -18,6 +20,9 @@ Ontario employment law (ESA, OHSA, AODA, Human Rights Code), Legal covers PIPEDA
    spreadsheets, and exports all work.
 5. Ask for work in plain language ("analyze last month's bank statements", "review this
    ad export", "are we ESA-compliant?") or run a skill like `/monthly-close`.
+6. Put it on autopilot: enable the cadence in `company/routines.md` and schedule
+   `/run-routines` (see `docs/automation.md`); optionally wire up Slack channels
+   (`docs/slack.md`) and live connectors (`docs/connectors.md`).
 
 ## Channels & agents
 
@@ -105,6 +110,14 @@ Ontario employment law (ESA, OHSA, AODA, Human Rights Code), Legal covers PIPEDA
 | `ecom-store-optimizer` | Storefront & checkout conversion audit with $-sized funnel leaks |
 | `ecom-supplier-analyst` | Supplier scorecards, landed cost, PO planning, FX exposure |
 
+### Technology (CTO/IT) — `channels/technology/`
+| Agent | What it does |
+|---|---|
+| `cto-stack-auditor` | Tool-stack health: shadow IT, overlaps, seats vs. spend, single-owner risk |
+| `cto-website-auditor` | Technical site health: uptime, SSL/DNS/domain expiry, speed, email auth (SPF/DKIM/DMARC) |
+| `cto-security-auditor` | Defensive posture: MFA, access hygiene, payment-fraud controls, incident readiness |
+| `cto-data-steward` | Backups (with restore-test discipline), data map, retention, continuity scenarios |
+
 ## Skills (slash commands)
 
 | Skill | What it runs |
@@ -125,6 +138,8 @@ Ontario employment law (ESA, OHSA, AODA, Human Rights Code), Legal covers PIPEDA
 | `/ask-counsel` | Legal question → Ontario legal information + lawyer-prep package (not legal advice) |
 | `/inventory-review` | Stock health: reorder-now list, dead stock, cash in inventory |
 | `/ecom-audit` | Full store review: SKU margins, checkout funnel, inventory, suppliers |
+| `/it-security-check` | Security + backup/continuity audit with a ranked hardening plan |
+| `/run-routines` | Check `company/routines.md` and run whatever's due — the scheduler entry point |
 
 ## Data drop-zone map
 
@@ -140,7 +155,31 @@ channels/legal/data/          contracts/ corporate-records/ insurance/
 channels/customer-experience/data/  reviews/ surveys/ support-exports/
 channels/ecommerce/data/      inventory-exports/ sales-exports/ product-catalog/
                               suppliers/ storefront/
+channels/technology/data/     access/ website/ security/ backups/ it-vendors/
+                              (systems inventory is shared at channels/operations/data/systems/)
 ```
+
+### How to get files in
+
+Any of these works — the agents don't care how the file arrived, only that it's in
+the right folder:
+
+1. **GitHub web UI** (easiest, no tools needed): open the repo on github.com,
+   navigate to the folder (e.g. `channels/finance/data/bank-statements/`), then
+   **Add file → Upload files** and drag the PDFs/CSVs in. Commit. Done.
+2. **In a Claude Code session**: attach/drag the file into the chat and say where
+   it goes ("file these under finance bank statements") — Claude saves it to the
+   folder and can run the analysis in the same breath.
+3. **Git locally**: clone, copy files into the folders, commit, push.
+4. **Slack** (once connected, see `docs/slack.md`): upload the file in the mapped
+   channel and ask @Claude to file + analyze it.
+
+Example — *"I have the books for a financial audit"*: drop bank statements in
+`finance/data/bank-statements/`, card statements in `credit-card-statements/`, your
+QuickBooks/Xero exports (P&L, balance sheet, general ledger) in
+`accounting-exports/`, and any invoices/bills in `invoices/` and `bills/`. Then run
+`/analyze-statements` (or `/monthly-close`), and ask for what you want —
+"full financial review", "find cost cuts", "are the books consistent?"
 
 **Monthly data drop checklist** (keeps every agent current):
 - [ ] Bank + credit-card statements → `finance/data/bank-statements/`, `credit-card-statements/`
@@ -168,11 +207,33 @@ git fetch template
 git merge template/main --allow-unrelated-histories
 ```
 
-## Automation ideas
+## Scheduled routines
 
-Using Claude Code scheduled tasks/routines: `/weekly-brief` every Monday morning,
-`/monthly-close` on the 3rd of each month, `/hr-compliance-check` quarterly, and
-`/competitor-scan` monthly.
+The operating rhythm is data, not tribal knowledge: `company/routines.md` defines
+what runs and how often (weekly brief, monthly close, quarterly compliance/security/
+cost sweeps…), and **`/run-routines`** checks what's due and runs it — skipping
+anything blocked on missing data and logging every run.
+
+To put it on a schedule (full guide: `docs/automation.md`):
+- **Claude Code Routines** (recommended): claude.ai/code/routines → weekly or
+  weekday trigger with the prompt `/run-routines`.
+- **GitHub Actions**: copy `docs/automation/routines-github-action.yml` to
+  `.github/workflows/routines.yml` and add an API-key secret.
+- **Manual**: just type `/run-routines` whenever — it catches up on everything owed.
+
+## Live data connectors
+
+Everything works file-first, but connectors upgrade agents to live data: Ahrefs for
+SEO, accounting (QuickBooks/Xero), GA4, CRM, Shopify, helpdesk. The convention:
+agents use live data when connected and save pulls into `data/` so reports stay
+reproducible. Per-channel table and setup: `docs/connectors.md`.
+
+## Slack channels
+
+Department Slack channels map onto repo channels — invite @Claude (Claude app for
+Slack) into #finance/#marketing/#hr/etc., pin the routing note, and fill
+`company/slack-channel-map.md`. Drop a file in the channel and ask @Claude to file
+and analyze it. Setup and etiquette: `docs/slack.md`.
 
 ## Security & disclaimers
 

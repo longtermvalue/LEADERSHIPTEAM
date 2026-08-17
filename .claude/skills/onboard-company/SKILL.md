@@ -37,7 +37,12 @@ You are onboarding a new company into its AI leadership team repo.
    accounting export, ad export (if advertising), CRM export (if they have one),
    payroll register, current policies/handbook.
 
-6. **Finish**: summarize what was set up, what's still placeholder, the first-drop
+6. **Cadence & channels**: tune `company/routines.md` for this company (enable the
+   e-commerce/board rows if applicable, disable what doesn't fit) and point to
+   `docs/automation.md` for scheduling `/run-routines`. If they use Slack, offer to
+   fill `company/slack-channel-map.md` from their channel names (`docs/slack.md`).
+
+7. **Finish**: summarize what was set up, what's still placeholder, the first-drop
    checklist, and suggest the natural first runs (`/analyze-statements` after the
    statements land, `/hr-compliance-check`, `/marketing-audit`). Offer to commit.
 

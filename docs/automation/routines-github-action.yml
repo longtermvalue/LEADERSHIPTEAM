@@ -1,0 +1,32 @@
+# Scheduled leadership-team routines via GitHub Actions.
+#
+# To activate: copy this file to .github/workflows/routines.yml in the company
+# repo and add the ANTHROPIC_API_KEY secret (Settings → Secrets and variables →
+# Actions). See docs/automation.md for the OAuth-token alternative.
+#
+# The schedule below fires weekdays at 12:00 UTC (~7-8am Eastern). One firing is
+# enough — /run-routines works out what's actually due from company/routines.md.
+
+name: Leadership-team routines
+
+on:
+  schedule:
+    - cron: "0 12 * * 1-5"
+  workflow_dispatch: {} # allows manual "Run workflow" from the Actions tab
+
+jobs:
+  run-routines:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # the run commits its reports back to the repo
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          prompt: "/run-routines"
+          # Optional tuning, e.g.:
+          # claude_args: |
+          #   --max-turns 80

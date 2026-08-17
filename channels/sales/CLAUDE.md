@@ -29,3 +29,6 @@ CRM data quality.
 - Proposals: pull pricing only from `data/pricing/` or the company profile — never
   invent prices. Check margins against finance-channel data when discounting.
 - Forecasts show assumptions (win rates used per stage) and a best/likely/worst range.
+- If a CRM connector (HubSpot/Pipedrive/etc. MCP) is available, pull the live
+  pipeline instead of waiting for CSV exports — save the pull into
+  `data/crm-exports/` with a dated filename (root CLAUDE.md rule 9).

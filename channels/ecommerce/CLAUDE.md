@@ -36,3 +36,6 @@ promotions).
 - Consumer-protection basics for the storefront: honest pricing (all-in where
   required), truthful claims, clear shipping/return policies — flag anything
   misleading to the legal channel.
+- If a Shopify/marketplace connector is available, pull live orders/inventory
+  instead of waiting for exports — save pulls into the matching `data/` subfolder
+  with a dated filename (root CLAUDE.md rule 9).

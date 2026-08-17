@@ -46,3 +46,7 @@ budgets, cost optimization, receivables/payables, and Canadian tax readiness.
   per account, and flag any gap vs. the statement.
 - Tax/accounting outputs end with the professional-advice disclaimer (see root
   CLAUDE.md rule 7) — this channel prepares, a CPA files.
+- If an accounting connector (QuickBooks/Xero MCP) is available in the session,
+  pull live statements instead of waiting for exports — and save the pull into
+  `data/accounting-exports/` with a dated filename (root CLAUDE.md rule 9). The
+  bank-statement ledger remains the cash-basis source of truth either way.
