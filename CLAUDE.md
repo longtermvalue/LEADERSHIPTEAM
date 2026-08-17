@@ -69,10 +69,21 @@ starts at `legal-chief-counsel`. Repeatable workflows have skills — see
    with a dated filename so reports stay reproducible. When no connector is
    present, work from `data/` files and name the export that would improve the
    analysis. See `docs/connectors.md`.
+10. **The inbox is the front door for data.** Users can drop any file into
+    `inbox/` instead of finding the right folder; `/file-inbox` identifies, renames,
+    files, and logs it. Files attached in chat are treated the same way — identify
+    and place them, never ask the user which folder. If `inbox/` contains unfiled
+    files at the start of any session, mention it and offer to file them (skills
+    that consume data, like `/analyze-statements` and `/monthly-close`, check the
+    inbox for relevant files before declaring data missing). Moving files OUT of
+    `inbox/` is the one sanctioned move; rule 2's read-only protection applies the
+    moment a file lands in a `data/` folder.
 
 ## Where things live
 
 ```
+inbox/                       Drop-anything upload folder → sorted by /file-inbox
+                             (filing-log.md records every move)
 company/                     Company-wide identity: profile, goals/OKRs, org chart,
                              routines.md (cadence), slack-channel-map.md
 channels/<channel>/data/     INPUT drop-zones (subfolders per data type)

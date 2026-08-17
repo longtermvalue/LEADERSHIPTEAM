@@ -7,9 +7,11 @@ Run the finance close for the most recently completed month (confirm which month
 ambiguous).
 
 ## Sequence
-1. **Ingest**: run the `cfo-bookkeeper` method — process any statement files not yet
-   in `channels/finance/ledger/processed-files.md`. If the month's statements aren't
-   dropped yet, stop and list exactly which files are needed and where to put them.
+1. **Ingest**: check `inbox/` for unfiled financial documents (file them via the
+   `/file-inbox` flow first), then run the `cfo-bookkeeper` method — process any
+   statement files not yet in `channels/finance/ledger/processed-files.md`. If the
+   month's statements aren't dropped yet, stop and list exactly which files are
+   needed — and remind that dropping them anywhere in `inbox/` is enough.
 2. **Analyze**: `cfo-financial-analyst` method for the month — P&L, variances,
    trends. If a budget exists in `data/budgets/`, include `cfo-budget-analyst`
    variance mode.

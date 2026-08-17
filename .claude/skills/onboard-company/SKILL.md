@@ -31,11 +31,12 @@ You are onboarding a new company into its AI leadership team repo.
    "# AI Leadership Team — Acme Corp").
 
 5. **Data walkthrough**: from the systems answers, produce a tailored "first data
-   drop" checklist — the 5–8 highest-value exports for THIS company and the exact
-   folder for each (e.g., "RBC chequing statements (last 3 months, PDF) →
-   `channels/finance/data/bank-statements/`"). Prioritize: bank statements,
+   drop" checklist — the 5–8 highest-value exports for THIS company (e.g., "RBC
+   chequing statements, last 3 months, PDF"). Prioritize: bank statements,
    accounting export, ad export (if advertising), CRM export (if they have one),
-   payroll register, current policies/handbook.
+   payroll register, current policies/handbook. Tell them the easy path: **dump
+   everything into `inbox/` and run `/file-inbox`** — no need to learn the folder
+   map (`docs/data-exports.md` has per-system export directions).
 
 6. **Cadence & channels**: tune `company/routines.md` for this company (enable the
    e-commerce/board rows if applicable, disable what doesn't fit) and point to

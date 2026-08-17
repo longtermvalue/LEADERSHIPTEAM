@@ -1,11 +1,11 @@
 # AI Leadership Team
 
 A duplicatable Claude Code workspace that acts as a full leadership team for one
-company. Ten department **channels**, 49 specialist **agents**, and 18 workflow
-**skills** (slash commands). Drop company files into each channel's `data/`
-folders; the agents analyze them and write dated reports into `reports/`. A
-built-in cadence (`company/routines.md` + `/run-routines`) keeps it running on a
-schedule — see `docs/automation.md`.
+company. Ten department **channels**, 49 specialist **agents**, and 19 workflow
+**skills** (slash commands). Drop company files into **`inbox/`** (or straight
+into a channel's `data/` folders); the agents file and analyze them and write
+dated reports into `reports/`. A built-in cadence (`company/routines.md` +
+`/run-routines`) keeps it running on a schedule — see `docs/automation.md`.
 
 Built for Ontario, Canada businesses: Finance thinks in CAD/CRA/HST, HR is grounded in
 Ontario employment law (ESA, OHSA, AODA, Human Rights Code), Legal covers PIPEDA/CASL.
@@ -16,7 +16,9 @@ Ontario employment law (ESA, OHSA, AODA, Human Rights Code), Legal covers PIPEDA
 2. Open it in Claude Code (web, desktop, or CLI).
 3. Run **`/onboard-company`** — a short interview that fills in
    `company/company-profile.md`, goals, and org chart.
-4. **Drop data** into the `channels/*/data/` folders (map below). PDFs, CSVs,
+4. **Drop data** — easiest: dump everything into **`inbox/`** and run
+   `/file-inbox` (it identifies, renames, and files each document). Or place files
+   directly into the `channels/*/data/` folders (map below). PDFs, CSVs,
    spreadsheets, and exports all work.
 5. Ask for work in plain language ("analyze last month's bank statements", "review this
    ad export", "are we ESA-compliant?") or run a skill like `/monthly-close`.
@@ -140,6 +142,7 @@ Ontario employment law (ESA, OHSA, AODA, Human Rights Code), Legal covers PIPEDA
 | `/ecom-audit` | Full store review: SKU margins, checkout funnel, inventory, suppliers |
 | `/it-security-check` | Security + backup/continuity audit with a ranked hardening plan |
 | `/run-routines` | Check `company/routines.md` and run whatever's due — the scheduler entry point |
+| `/file-inbox` | Sort everything in `inbox/` into the right data folders and offer the matching analyses |
 
 ## Data drop-zone map
 
@@ -161,27 +164,32 @@ channels/technology/data/     access/ website/ security/ backups/ it-vendors/
 
 ### How to get files in
 
-Any of these works — the agents don't care how the file arrived, only that it's in
-the right folder:
+**The easy path — one folder, zero decisions:** put everything in **`inbox/`** and
+run `/file-inbox`. Claude reads each file, figures out what it is, renames it to
+the dated convention, moves it to the right channel folder, logs it in
+`inbox/filing-log.md`, and offers to run the matching analyses. Mixed piles are
+fine; anything ambiguous stays put with a one-line question instead of a guess.
 
-1. **GitHub web UI** (easiest, no tools needed): open the repo on github.com,
-   navigate to the folder (e.g. `channels/finance/data/bank-statements/`), then
-   **Add file → Upload files** and drag the PDFs/CSVs in. Commit. Done.
-2. **In a Claude Code session**: attach/drag the file into the chat and say where
-   it goes ("file these under finance bank statements") — Claude saves it to the
-   folder and can run the analysis in the same breath.
-3. **Git locally**: clone, copy files into the folders, commit, push.
-4. **Slack** (once connected, see `docs/slack.md`): upload the file in the mapped
-   channel and ask @Claude to file + analyze it.
+Ways to reach the inbox (or any folder directly, if you prefer):
 
-Example — *"I have the books for a financial audit"*: drop bank statements in
-`finance/data/bank-statements/`, card statements in `credit-card-statements/`, your
-QuickBooks/Xero exports (P&L, balance sheet, general ledger) in
-`accounting-exports/`, and any invoices/bills in `invoices/` and `bills/`. Then run
-`/analyze-statements` (or `/monthly-close`), and ask for what you want —
-"full financial review", "find cost cuts", "are the books consistent?"
+1. **GitHub web UI** (no tools needed): open `inbox/` on github.com →
+   **Add file → Upload files** → drag everything in → Commit.
+2. **In a Claude Code session**: attach/drag files into the chat and say "file
+   these" — attachments are treated as inbox drops, filed and analyzed in the
+   same breath.
+3. **Git locally**: clone, copy files in, commit, push.
+4. **Slack** (once connected, see `docs/slack.md`): upload in the mapped channel
+   and ask @Claude to file + analyze it.
 
-**Monthly data drop checklist** (keeps every agent current):
+Example — *"I have the books for a financial audit"*: drag the whole pile (bank
+and card statements, QuickBooks/Xero exports, invoices, bills) into `inbox/`,
+then say: "file these and audit the books." Filing, ledger ingestion, and the
+financial review chain from there. Per-system export directions:
+`docs/data-exports.md`; each channel's `data/README.md` documents its subfolders
+for manual filing.
+
+**Monthly data drop checklist** (keeps every agent current — download the lot,
+drag into `inbox/`, run `/file-inbox` then `/run-routines`):
 - [ ] Bank + credit-card statements → `finance/data/bank-statements/`, `credit-card-statements/`
 - [ ] Accounting export (QuickBooks/Xero P&L + balance sheet) → `finance/data/accounting-exports/`
 - [ ] Ad platform exports (Google/Meta/LinkedIn) → `marketing/data/ad-exports/`
